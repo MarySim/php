@@ -35,6 +35,61 @@ const personGenerator = {
             "id_10": "Андрей"
         }
     }`,
+    firstNameFemaleJson: `{
+        "count": 10,
+        "list": {     
+            "id_1": "Анна",
+            "id_2": "Мария",
+            "id_3": "Елена",
+            "id_4": "Дарья",
+            "id_5": "Анастасия",
+            "id_6": "Ольга",
+            "id_7": "Екатерина",
+            "id_8": "Виктория",
+            "id_9": "Наталья",
+            "id_10": "Полина"
+        }
+    }`,
+    patronymicMaleJson: `{
+        "count": 5,
+        "list": {     
+            "id_1": "Иванович",
+            "id_2": "Александрович",
+            "id_3": "Сергеевич",
+            "id_4": "Дмитриевич",
+            "id_5": "Андреевич"
+        }
+    }`,
+    patronymicFemaleJson: `{
+        "count": 5,
+        "list": {     
+            "id_1": "Ивановна",
+            "id_2": "Александровна",
+            "id_3": "Сергеевна",
+            "id_4": "Дмитриевна",
+            "id_5": "Андреевна"
+        }
+    }`,
+    professionMaleJson: `{
+        "count": 5,
+        "list": {     
+            "id_1": "Шахтёр",
+            "id_2": "Слесарь",
+            "id_3": "Солдат",
+            "id_4": "Программист",
+            "id_5": "Инженер"
+        }
+    }`,
+    professionFemaleJson: `{
+        "count": 5,
+        "list": {     
+            "id_1": "Учительница",
+            "id_2": "Врач",
+            "id_3": "Дизайнер",
+            "id_4": "Программист",
+            "id_5": "Актриса"
+        }
+    }`,
 
     GENDER_MALE: 'Мужчина',
     GENDER_FEMALE: 'Женщина',
@@ -43,28 +98,77 @@ const personGenerator = {
 
     randomValue: function (json) {
         const obj = JSON.parse(json);
-        const prop = `id_${this.randomIntNumber(obj.count, 1)}`;  // this = personGenerator
+        const prop = `id_${this.randomIntNumber(obj.count, 1)}`;  
         return obj.list[prop];
     },
 
+    randomGender: function() {
+        return this.randomIntNumber(1, 0) === 0 ? this.GENDER_MALE : this.GENDER_FEMALE;
+    },
+
+    randomBirthYear: function() {
+        return this.randomIntNumber(2000, 1950);
+    },
+
+    randomBirthDate: function() {
+        const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+        const monthIndex = this.randomIntNumber(11, 0);
+        
+        let daysInMonth;
+        if (monthIndex === 1) {
+            daysInMonth = 28;
+        } else if (monthIndex === 3 || monthIndex === 5 || monthIndex === 8 || monthIndex === 10) {
+            daysInMonth = 30;
+        } else {
+            daysInMonth = 31;
+        }
+
+        const day = this.randomIntNumber(daysInMonth, 1);
+        return `${day} ${months[monthIndex]}`;
+    },
+
     randomFirstName: function() {
-
-        return this.randomValue(this.firstNameMaleJson);
-
+        if (this.person.gender === this.GENDER_MALE) {
+            return this.randomValue(this.firstNameMaleJson);
+        } else {
+            return this.randomValue(this.firstNameFemaleJson);
+        }
     },
 
-
-     randomSurname: function() {
-
-        return this.randomValue(this.surnameJson);
-
+    randomSurname: function() {
+        let surname = this.randomValue(this.surnameJson);
+        if (this.person.gender === this.GENDER_FEMALE) {
+            return surname + 'а';
+        } else {
+            return surname;
+        }
     },
 
+    randomPatronymic: function() {
+        if (this.person.gender === this.GENDER_MALE) {
+            return this.randomValue(this.patronymicMaleJson);
+        } else {
+            return this.randomValue(this.patronymicFemaleJson);
+        }
+    },
+
+    randomProfession: function() {
+        if (this.person.gender === this.GENDER_MALE) {
+            return this.randomValue(this.professionMaleJson);
+        } else {
+            return this.randomValue(this.professionFemaleJson);
+        }
+    },
 
     getPerson: function () {
         this.person = {};
-        // this.person.gender = this.randomGender();
+        this.person.gender = this.randomGender();
         this.person.firstName = this.randomFirstName();
+        this.person.surname = this.randomSurname();
+        this.person.patronymic = this.randomPatronymic();
+        this.person.birthYear = this.randomBirthYear();
+        this.person.birthDate = this.randomBirthDate();
+        this.person.profession = this.randomProfession();
         return this.person;
     }
 };

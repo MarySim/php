@@ -1,0 +1,35 @@
+body {
+    background-color: #e1f5fe;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.game-card {
+    margin-top: 12vh;
+}
+
+.card {
+    border: 1px solid #b3e5fc;
+    border-radius: 8px;
+}
+
+.card-header {
+    background-color: #81d4fa;
+    color: #000000;
+    font-weight: bold;
+    border-bottom: 1px solid #b3e5fc;
+}
+
+.card-footer {
+    background-color: #f1f8ff;
+    border-top: 1px solid #b3e5fc;
+}
+
+.btn-primary {
+    background-color: #29b6f6;
+    border: none;
+}
+
+.btn-secondary {
+    background-color: #b0bec5;
+    border: none;
+}
