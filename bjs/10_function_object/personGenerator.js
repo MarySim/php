@@ -1,6 +1,6 @@
 const personGenerator = {
     surnameJson: `{  
-        "count": 15,
+        "count": 16,
         "list": {
             "id_1": "Иванов",
             "id_2": "Смирнов",
@@ -50,26 +50,7 @@ const personGenerator = {
             "id_10": "Полина"
         }
     }`,
-    patronymicMaleJson: `{
-        "count": 5,
-        "list": {     
-            "id_1": "Иванович",
-            "id_2": "Александрович",
-            "id_3": "Сергеевич",
-            "id_4": "Дмитриевич",
-            "id_5": "Андреевич"
-        }
-    }`,
-    patronymicFemaleJson: `{
-        "count": 5,
-        "list": {     
-            "id_1": "Ивановна",
-            "id_2": "Александровна",
-            "id_3": "Сергеевна",
-            "id_4": "Дмитриевна",
-            "id_5": "Андреевна"
-        }
-    }`,
+    
     professionMaleJson: `{
         "count": 5,
         "list": {     
@@ -145,11 +126,27 @@ const personGenerator = {
     },
 
     randomPatronymic: function() {
+        let baseName = this.randomValue(this.firstNameMaleJson);
+        let patronymic = '';
+
         if (this.person.gender === this.GENDER_MALE) {
-            return this.randomValue(this.patronymicMaleJson);
+            if (baseName.endsWith('й')) {
+                patronymic = baseName.slice(0, -1) + 'евич';
+            } else if (baseName.endsWith('а')) {
+                patronymic = baseName.slice(0, -1) + 'ич';
+            } else {
+                patronymic = baseName + 'ович';
+            }
         } else {
-            return this.randomValue(this.patronymicFemaleJson);
+            if (baseName.endsWith('й')) {
+                patronymic = baseName.slice(0, -1) + 'евна';
+            } else if (baseName.endsWith('а')) {
+                patronymic = baseName.slice(0, -1) + 'ична';
+            } else {
+                patronymic = baseName + 'овна';
+            }
         }
+        return patronymic.replace('Михаилович', 'Михайлович').replace('Михаиловна', 'Михайловна');
     },
 
     randomProfession: function() {
